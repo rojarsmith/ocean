@@ -2,6 +2,8 @@
 <!DOCTYPE xml>
 <configuration scan="true" scanPeriod="60 seconds"
 	debug="false">
+	<springProperty scope="context"
+		name="spring.application.name" source="spring.application.name" />
 	<springProperty scope="context" name="logback.path"
 		source="logback.path" />
 	<contextName>logback</contextName>
@@ -18,7 +20,7 @@
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<FileNamePattern>${logback.path}/ocean-service-discovery/%d{yyyy-MM-dd}/%d{yyyy-MM-dd}.%i.log </FileNamePattern>
+			<FileNamePattern>${logback.path}/${spring.application.name}/%d{yyyy-MM-dd}/%d{yyyy-MM-dd}.%i.log </FileNamePattern>
 			<maxFileSize>100MB</maxFileSize>
 			<maxHistory>100</maxHistory>
 		</rollingPolicy>
