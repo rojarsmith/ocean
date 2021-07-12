@@ -1,0 +1,2 @@
+rootProject.name = 'ocean-authorization'
+includeFlat 'ocean-common'
