@@ -15,13 +15,12 @@ import lombok.Data;
 @Data
 public class ServiceProperty {
 
-	String serviceOwnerUsername;
-
 	Service service = new Service();
+
+	Spring spring = new Spring();
 
 	@Data
 	public static class Service {
-		String ownerUsername;
 
 		Owner owner = new Owner();
 
@@ -31,6 +30,33 @@ public class ServiceProperty {
 			String password;
 			String email;
 		}
+	}
+
+	@Data
+	public static class Spring {
+
+		Profiles profiles = new Profiles();
+
+		@Data
+		public static class Profiles {
+			String active;
+
+		}
+
+	}
+
+	public boolean isDev() {
+		if (spring.getProfiles().getActive().equals("dev")) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isTest() {
+		if (spring.getProfiles().getActive().equals("test")) {
+			return true;
+		}
+		return false;
 	}
 
 }
