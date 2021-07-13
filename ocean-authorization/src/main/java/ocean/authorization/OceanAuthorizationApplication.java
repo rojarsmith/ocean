@@ -3,6 +3,7 @@ package ocean.authorization;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 
 /**
  * @author Rojar Smith
@@ -11,6 +12,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
  */
 @SpringBootApplication
 @EnableConfigurationProperties
+//@EnableAuthorizationServer
 public class OceanAuthorizationApplication {
 
 	public static void main(String[] args) {

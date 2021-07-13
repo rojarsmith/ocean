@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
@@ -28,23 +27,38 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().formLogin().disable();
-		http.authorizeRequests()
-				//
-				.antMatchers("/oauth/authorize").permitAll()
-				//
-				.antMatchers("/oauth/token").permitAll()
-				//
-				.antMatchers("/oauth/token_key").permitAll()
-				//
-				.antMatchers("/oauth/check_token").permitAll();
-
 		if (serviceProperty.isTest()) {
-			http.headers().frameOptions().disable();
-			http.authorizeRequests()
+			http.csrf().disable()
+			//
+			.formLogin()
+			.and()
 					//
-					.antMatchers("/h2-console").permitAll();
+					.authorizeRequests()
+					//
+					.antMatchers("/oauth/authorize").permitAll()
+					//
+					.antMatchers("/oauth/token").permitAll()
+					//
+					.antMatchers("/oauth/token_key").permitAll()
+					//
+					.antMatchers("/oauth/check_token").permitAll()
+					//
+					.antMatchers("/h2-console").permitAll()
+					//
+					.anyRequest().authenticated();
+
+		} else {
+
 		}
+
+//		if (serviceProperty.isTest()) {
+//			http.headers().frameOptions().disable();
+//			http.authorizeRequests()
+//					//
+//					.antMatchers("/h2-console").permitAll();
+//		}
+
+//		http.authorizeRequests().anyRequest().authenticated();
 	}
 
 	/**

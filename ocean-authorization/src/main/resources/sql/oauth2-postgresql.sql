@@ -87,7 +87,7 @@ VALUES
    '$2a$10$Sd8AZh/bJv3Es7TKvKHHD.UYB1msnYPyqO.Nce2wHLTJWjKC829.q', -- 12341234
    'all',
    'authorization_code,password,refresh_token',
-   'http://example.com',
+   'http://ocean.com',
    NULL,
    NULL,
    NULL,
