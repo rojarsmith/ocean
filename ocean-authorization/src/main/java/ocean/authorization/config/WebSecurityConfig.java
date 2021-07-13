@@ -1,7 +1,10 @@
 package ocean.authorization.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
@@ -10,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+import ocean.authorization.init.ServiceProperty;
+
 /**
  * @author Rojar Smith
  *
@@ -17,6 +22,31 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
  */
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+	@Autowired
+	ServiceProperty serviceProperty;
+
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.csrf().disable().formLogin().disable();
+		http.authorizeRequests()
+				//
+				.antMatchers("/oauth/authorize").permitAll()
+				//
+				.antMatchers("/oauth/token").permitAll()
+				//
+				.antMatchers("/oauth/token_key").permitAll()
+				//
+				.antMatchers("/oauth/check_token").permitAll();
+
+		if (serviceProperty.isTest()) {
+			http.headers().frameOptions().disable();
+			http.authorizeRequests()
+					//
+					.antMatchers("/h2-console").permitAll();
+		}
+	}
+
 	/**
 	 * Must encrypt password in Spring 5.
 	 *
@@ -56,4 +86,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
+
 }
