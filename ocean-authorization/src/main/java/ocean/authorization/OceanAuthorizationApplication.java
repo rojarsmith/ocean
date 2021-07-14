@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 /**
  * @author Rojar Smith
@@ -12,7 +13,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
  */
 @SpringBootApplication
 @EnableConfigurationProperties
-//@EnableAuthorizationServer
+@EnableAuthorizationServer
+@EnableResourceServer
 public class OceanAuthorizationApplication {
 
 	public static void main(String[] args) {

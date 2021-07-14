@@ -28,14 +28,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		if (serviceProperty.isTest()) {
-			http.csrf().disable()
-			//
-			.formLogin()
-			.and()
+			http.csrf().disable().httpBasic().and()
+//			.cors().and()
+					//
+					.headers().frameOptions().disable().and()
+//			.formLogin().disable()
+//			.and()
 					//
 					.authorizeRequests()
 					//
-					.antMatchers("/oauth/authorize").permitAll()
+					.antMatchers("/oauth/authorize**").permitAll()
 					//
 					.antMatchers("/oauth/token").permitAll()
 					//
@@ -43,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					//
 					.antMatchers("/oauth/check_token").permitAll()
 					//
-					.antMatchers("/h2-console").permitAll()
+					.antMatchers("/h2-console/**").permitAll()
 					//
 					.anyRequest().authenticated();
 
@@ -57,8 +59,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //					//
 //					.antMatchers("/h2-console").permitAll();
 //		}
-
-//		http.authorizeRequests().anyRequest().authenticated();
 	}
 
 	/**

@@ -82,12 +82,12 @@ INSERT INTO oauth_client_details
 )
 VALUES
 (
-   'ocean',
+   'ocean', -- b2NlYW4=
    'resource',
    '$2a$10$Sd8AZh/bJv3Es7TKvKHHD.UYB1msnYPyqO.Nce2wHLTJWjKC829.q', -- 12341234
    'all',
    'authorization_code,password,refresh_token',
-   'http://ocean.com',
+   'http://localhost:9001',
    NULL,
    NULL,
    NULL,
