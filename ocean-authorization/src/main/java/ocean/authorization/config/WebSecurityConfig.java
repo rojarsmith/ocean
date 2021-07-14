@@ -3,16 +3,16 @@ package ocean.authorization.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-import ocean.authorization.init.ServiceProperty;
+import ocean.authorization.ServiceProperty;
 
 /**
  * @author Rojar Smith
@@ -25,15 +25,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	ServiceProperty serviceProperty;
 
+	@Autowired
+	UserDetailsService userDetailsService;
+
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+	}
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		if (serviceProperty.isTest()) {
-			http.csrf().disable().httpBasic().and()
-//			.cors().and()
+			http.csrf().disable()
+					//
+					.httpBasic().and()
+					//
+					.cors().and()
 					//
 					.headers().frameOptions().disable().and()
-//			.formLogin().disable()
-//			.and()
+					//
+					.formLogin().disable()
 					//
 					.authorizeRequests()
 					//
@@ -45,20 +56,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					//
 					.antMatchers("/oauth/check_token").permitAll()
 					//
-					.antMatchers("/h2-console/**").permitAll()
-					//
 					.anyRequest().authenticated();
-
 		} else {
 
 		}
+	}
 
-//		if (serviceProperty.isTest()) {
-//			http.headers().frameOptions().disable();
-//			http.authorizeRequests()
-//					//
-//					.antMatchers("/h2-console").permitAll();
-//		}
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		if (serviceProperty.isTest()) {
+			web.ignoring()
+					//
+					.antMatchers("/h2-console/**");
+		}
 	}
 
 	/**
@@ -72,24 +82,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	/**
-	 * Create 3 user
-	 *
-	 * @return InMemoryUserDetailsManager
-	 */
-	@Bean
-	@Override
-	public UserDetailsService userDetailsService() {
-		InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-		manager.createUser(
-				User.withUsername("123").password(passwordEncoder().encode("1234")).authorities("ROLE_USER").build());
-		manager.createUser(
-				User.withUsername("user").password(passwordEncoder().encode("12345")).authorities("ROLE_USER").build());
-		manager.createUser(User.withUsername("admin").password(passwordEncoder().encode("admin"))
-				.authorities("ROLE_ADMIN").build());
-		return manager;
-	}
-
-	/**
 	 * Certificate management.
 	 *
 	 * @return Certificate manager
@@ -97,8 +89,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	 */
 	@Bean
 	@Override
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
+	protected AuthenticationManager authenticationManager() throws Exception {
+		return super.authenticationManager();
 	}
 
 }

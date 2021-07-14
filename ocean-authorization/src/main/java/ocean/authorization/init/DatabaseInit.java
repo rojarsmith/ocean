@@ -1,12 +1,27 @@
 package ocean.authorization.init;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
+import ocean.authorization.ServiceProperty;
+import ocean.common.model.entity.Member;
+import ocean.common.service.MemberService;
 
 /**
  * @author Rojar Smith
@@ -15,14 +30,68 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Component
 @Slf4j
-@Profile("dev")
+@Profile({ "dev", "test" })
 public class DatabaseInit implements ApplicationRunner {
 	@Autowired
 	ServiceProperty serviceProperty;
 
+	@Autowired
+	PasswordEncoder passwordEncoder;
+
+	@Autowired
+	MemberService memberService;
+
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		log.info("Profiles: " + serviceProperty.getSpring().getProfiles().getActive());
+
+		initDatabase();
+	}
+
+	void initDatabase() {
+		if (serviceProperty.isTest() || serviceProperty.isTest()) {
+			// Creating user's account
+
+			List<Member> members = new ArrayList<>();
+			String utcTimeOwner = "2021-12-21T12:26:11Z";
+			Instant instantOwner = Instant.parse(utcTimeOwner);
+
+//			Member memberOwner = new Member();
+//			memberOwner.setUsername(serviceProperty.getOwnerUsername());
+//			memberOwner.setPassword(passwordEncoder.encode(serviceProperty.getOwnerPassword()));
+//			memberOwner.setEmail(serviceProperty.getOwnerEmail());
+//			memberOwner.setRegistTime(instantOwner);
+//			memberOwner.setMemberLevel(EnumSet.of(MemberStatus.REGISTERD, MemberStatus.VERIFIED_EMAIL));
+//			memberOwner.setRoleList(Arrays.asList(roleAdmin));
+//			members.add(memberOwner);
+
+			Member member = new Member();
+			member.setUsername("aaa");
+			member.setPassword(passwordEncoder.encode("11112222"));
+			member.setEmail("aaa@ocean.com");
+			member.setRegistTime(Instant.now());
+//			member.setMemberLevel(EnumSet.of(MemberStatus.REGISTERD));
+//			member.setRoleList(Arrays.asList(roleMember));
+			members.add(member);
+
+			for (int i = 1; i <= 100; i++) {
+				Member memberGen1 = new Member();
+				memberGen1.setUsername("user" + i);
+				memberGen1.setPassword(passwordEncoder.encode("11112222"));
+				memberGen1.setEmail("email" + i + "@ocean.com");
+//				if (i <= 50) {
+//					memberGen1.setRegistTime(Instant.now());
+//					memberGen1.setMemberLevel(EnumSet.of(MemberStatus.REGISTERD));
+//				} else {
+//					memberGen1.setRegistTime(Instant.now().plusSeconds(43200));
+//					memberGen1.setMemberLevel(EnumSet.of(MemberStatus.REGISTERD, MemberStatus.ILLEGAL));
+//				}
+//				memberGen1.setRoleList(Arrays.asList(roleMember));
+				members.add(memberGen1);
+			}
+
+			memberService.update(members);
+		}
 	}
 
 }

@@ -1,4 +1,4 @@
-package ocean.authorization.init;
+package ocean.authorization;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -59,4 +59,10 @@ public class ServiceProperty {
 		return false;
 	}
 
+	public boolean isDevOrTest() {
+		if(isDev() || isTest()) {
+			return true;
+		}
+		return false;
+	}
 }

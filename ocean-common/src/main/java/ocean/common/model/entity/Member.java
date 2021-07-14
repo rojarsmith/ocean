@@ -13,7 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotBlank;
 
-import org.hibernate.annotations.CreationTimestamp;
+//import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -55,7 +55,7 @@ public class Member {
 	@Column(unique = true)
 	String emailRescue;
 
-	@CreationTimestamp
+//	@CreationTimestamp
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	Instant registTime;
 
