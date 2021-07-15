@@ -1,5 +1,7 @@
 package ocean.authorization.config;
 
+import java.util.Arrays;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
@@ -22,6 +25,7 @@ import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFacto
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ocean.authorization.ServiceProperty;
+import ocean.authorization.security.InfoTokenEnhancer;
 
 /**
  * @author Rojar Smith
@@ -39,6 +43,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	ResourceLoader resourceLoader;
 
 	@Autowired
+	InfoTokenEnhancer infoTokenEnhancer;
+
+	@Autowired
 	private @NonNull AuthenticationManager authenticationManager;
 	private final @NonNull DataSource dataSource;
 
@@ -49,12 +56,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		endpoints.authenticationManager(this.authenticationManager).tokenStore(jdbcTokenStore())
-				//
-				.tokenStore(tokenStore())
-				//
-				.accessTokenConverter(jwtAccessTokenConverter());
-		;
+		TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+		tokenEnhancerChain.setTokenEnhancers(Arrays.asList(infoTokenEnhancer, jwtAccessTokenConverter()));
+
+		endpoints.tokenStore(tokenStore()).tokenStore(jdbcTokenStore()).tokenEnhancer(tokenEnhancerChain)
+				.authenticationManager(authenticationManager);
 	}
 
 	@Bean
