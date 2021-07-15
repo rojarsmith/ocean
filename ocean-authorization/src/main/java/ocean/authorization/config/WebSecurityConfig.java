@@ -58,7 +58,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					//
 					.anyRequest().authenticated();
 		} else {
-
+			http.csrf().disable()
+					//
+					.httpBasic().and()
+					//
+					.cors().and()
+					//
+					.headers().frameOptions().disable().and()
+					//
+					.formLogin().disable()
+					//
+					.authorizeRequests()
+					//
+					.antMatchers("/oauth/authorize**").permitAll()
+					//
+					.antMatchers("/oauth/token").permitAll()
+					//
+					.antMatchers("/oauth/token_key").permitAll()
+					//
+					.antMatchers("/oauth/check_token").permitAll()
+					//
+					.anyRequest().authenticated();
 		}
 	}
 

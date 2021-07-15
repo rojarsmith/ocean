@@ -11,10 +11,14 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -39,6 +43,9 @@ public class DatabaseInit implements ApplicationRunner {
 	PasswordEncoder passwordEncoder;
 
 	@Autowired
+	DataSource dataSource;
+
+	@Autowired
 	MemberService memberService;
 
 	@Override
@@ -49,7 +56,13 @@ public class DatabaseInit implements ApplicationRunner {
 	}
 
 	void initDatabase() {
-		if (serviceProperty.isTest() || serviceProperty.isTest()) {
+		if (serviceProperty.isDev()) {
+			ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8",
+					new ClassPathResource("sql/oauth2-postgresql.sql"));
+			resourceDatabasePopulator.execute(dataSource);
+		}
+
+		if (serviceProperty.isDevOrTest()) {
 			// Creating user's account
 
 			List<Member> members = new ArrayList<>();

@@ -8,7 +8,7 @@ import lombok.Data;
 /**
  * @author Rojar Smith
  *
- * @date 2021-07-12
+ * @date 2021-07-15
  */
 @Configuration
 @ConfigurationProperties
@@ -22,8 +22,22 @@ public class ServiceProperty {
 	@Data
 	public static class Service {
 
+		Oauth2 oauth2 = new Oauth2();
+		
 		Owner owner = new Owner();
 
+		@Data
+		public static class Oauth2 {
+			KeyStore keyStore = new KeyStore();
+			
+			@Data
+			public static class KeyStore {
+				String file;
+				String password;
+				String pair;
+			}
+		}
+		
 		@Data
 		public static class Owner {
 			String username;
@@ -35,7 +49,15 @@ public class ServiceProperty {
 	@Data
 	public static class Spring {
 
+		Config config = new Config();
+
 		Profiles profiles = new Profiles();
+
+		@Data
+		public static class Config {
+			String additionalLocation;
+
+		}
 
 		@Data
 		public static class Profiles {
@@ -60,7 +82,7 @@ public class ServiceProperty {
 	}
 
 	public boolean isDevOrTest() {
-		if(isDev() || isTest()) {
+		if (isDev() || isTest()) {
 			return true;
 		}
 		return false;

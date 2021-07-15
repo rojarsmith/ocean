@@ -1,5 +1,24 @@
-{"properties": [{
-  "name": "logback.path",
-  "type": "java.lang.String",
-  "description": "A description for 'logback.path'"
-}]}
+{
+	"properties": [
+		{
+			"name": "logback.path",
+			"type": "java.lang.String",
+			"description": "A description for 'logback.path'"
+		},
+		{
+			"name": "service.oauth2.key-store.file",
+			"type": "java.lang.String",
+			"description": ""
+		},
+		{
+			"name": "service.oauth2.key-store.password",
+			"type": "java.lang.String",
+			"description": ""
+		},
+		{
+			"name": "service.oauth2.key-store.pair",
+			"type": "java.lang.String",
+			"description": ""
+		}
+	]
+}

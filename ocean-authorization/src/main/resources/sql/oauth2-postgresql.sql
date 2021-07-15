@@ -89,8 +89,8 @@ VALUES
    'authorization_code,password,refresh_token',
    'http://localhost:9001',
    NULL,
-   NULL,
-   NULL,
+   3600, -- seconds, 1 hour
+   3600, -- seconds, 1 hour
    NULL,
    NULL
 );
