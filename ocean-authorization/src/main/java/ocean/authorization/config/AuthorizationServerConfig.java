@@ -9,10 +9,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
@@ -21,6 +23,7 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -46,8 +49,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	InfoTokenEnhancer infoTokenEnhancer;
 
 	@Autowired
-	private @NonNull AuthenticationManager authenticationManager;
-	private final @NonNull DataSource dataSource;
+	final @NonNull AuthenticationManager authenticationManager;
+	final @NonNull DataSource dataSource;
+	final @NonNull RedisConnectionFactory redisConnectionFactory;
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -59,10 +63,23 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
 		tokenEnhancerChain.setTokenEnhancers(Arrays.asList(infoTokenEnhancer, jwtAccessTokenConverter()));
 
-		endpoints.tokenStore(tokenStore()).tokenStore(jdbcTokenStore()).tokenEnhancer(tokenEnhancerChain)
-				.authenticationManager(authenticationManager);
+		endpoints.tokenStore(tokenStore())
+				//
+//				.tokenStore(jdbcTokenStore())
+				//
+				.tokenStore(redisTokenStore())
+				//
+				.tokenEnhancer(tokenEnhancerChain).authenticationManager(authenticationManager);
 	}
 
+	@Override
+	public void configure(AuthorizationServerSecurityConfigurer security) {
+	    security
+	        .checkTokenAccess("isAuthenticated()")
+	        // Can access public key.
+	        .tokenKeyAccess("isAuthenticated()");
+	}
+	
 	@Bean
 	public ClientDetailsService clientDetails() {
 		return new JdbcClientDetailsService(dataSource);
@@ -110,6 +127,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Bean
 	public TokenStore tokenStore() {
 		return new JwtTokenStore(jwtAccessTokenConverter());
+	}
+
+	@Bean
+	public TokenStore redisTokenStore() {
+		return new RedisTokenStore(redisConnectionFactory);
 	}
 
 }
