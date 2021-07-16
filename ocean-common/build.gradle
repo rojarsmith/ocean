@@ -45,7 +45,12 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'    
     annotationProcessor 'org.projectlombok:lombok'
     
+    developmentOnly 'it.ozimov:embedded-redis:0.7.3'
+    developmentOnly 'redis.clients:jedis:3.6.1'
+    
+    testImplementation 'it.ozimov:embedded-redis:0.7.3'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'redis.clients:jedis:3.6.1'
     
     testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'

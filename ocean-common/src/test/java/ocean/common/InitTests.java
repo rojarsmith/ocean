@@ -9,6 +9,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import ocean.common.model.entity.Member;
 import ocean.common.service.MemberService;
+import redis.embedded.RedisServer;
 
 /**
  * @author Rojar Smith
@@ -20,9 +21,12 @@ import ocean.common.service.MemberService;
 public class InitTests {
 	@Autowired
 	MemberService memberService;
+
 	
 	@PostConstruct
 	void init() {
+
+		
 		Member m1 = new Member();
 		m1.setEmail("rojarsmith@gmail.com");
 		m1.setUsername("Rojar");
