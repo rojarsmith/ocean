@@ -1,7 +1,6 @@
 package ocean.common.model.entity;
 
 import java.time.Instant;
-import java.util.EnumSet;
 import java.util.List;
 
 import javax.persistence.Column;

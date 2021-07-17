@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import ocean.common.enums.ResourceType;
 import ocean.common.model.entity.Member;
 import ocean.common.model.entity.Permission;
+import ocean.common.model.entity.Role;
 import ocean.common.repository.MemberRepository;
 import ocean.common.repository.PermissionRepository;
 import ocean.common.service.PermissionService;
@@ -51,11 +52,11 @@ public class PermissionServiceImpl implements PermissionService {
 			return permissions;
 		}
 
-//		for (Role role : member.get().getRoleList()) {
-//			for (Permission permission : role.getPermissionList()) {
-//				permissions.add(permission);
-//			}
-//		}
+		for (Role role : member.get().getRoleList()) {
+			for (Permission permission : role.getPermissionList()) {
+				permissions.add(permission);
+			}
+		}
 
 		return permissions;
 	}

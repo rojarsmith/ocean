@@ -18,7 +18,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import ocean.common.model.entity.Permission;
 import ocean.common.repository.PermissionRepository;
-import ocean.common.service.MemberService;
 
 /**
  * @author Rojar Smith
@@ -28,9 +27,6 @@ import ocean.common.service.MemberService;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration({ "classpath:service-spring.xml" })
 public class PermissionRepositoryTest {
-
-	@Autowired
-	MemberService memberService;
 
 	@Autowired
 	PermissionRepository permissionRepository;
