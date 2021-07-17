@@ -56,7 +56,7 @@
 	<bean id="redisStandaloneConfiguration"
 		class="org.springframework.data.redis.connection.RedisStandaloneConfiguration">
 		<property name="hostName" value="127.0.0.1" />
-		<property name="port" value="16379" />
+		<property name="port" value="6379" />
 		<property name="password" ref="redisPassword" />
 		<property name="database" value="0" />
 	</bean>
@@ -69,7 +69,7 @@
 	<bean id="keySerializer"
 		class="org.springframework.data.redis.serializer.StringRedisSerializer" />
 	<bean id="valueSerializer"
-		class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer" />
+		class="org.springframework.data.redis.serializer.StringRedisSerializer" />
 	<bean id="redisTemplate"
 		class="org.springframework.data.redis.core.RedisTemplate">
 		<property name="connectionFactory"
@@ -87,7 +87,6 @@
 		<property name="valueSerializer" ref="valueSerializer" />
 		<property name="hashKeySerializer" ref="keySerializer" />
 		<property name="hashValueSerializer" ref="valueSerializer" />
-
 	</bean>
 	<!-- redis config end -->
 	<!-- SET default mail properties -->

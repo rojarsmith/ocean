@@ -9,7 +9,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import ocean.common.model.entity.Member;
 import ocean.common.service.MemberService;
-import redis.embedded.RedisServer;
 
 /**
  * @author Rojar Smith
@@ -19,14 +18,12 @@ import redis.embedded.RedisServer;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration({ "classpath:service-spring.xml" })
 public class InitTests {
+
 	@Autowired
 	MemberService memberService;
 
-	
 	@PostConstruct
 	void init() {
-
-		
 		Member m1 = new Member();
 		m1.setEmail("rojarsmith@gmail.com");
 		m1.setUsername("Rojar");
@@ -41,4 +38,5 @@ public class InitTests {
 //		m2.setRoleList(Arrays.asList(role));
 		memberService.update(m2);
 	}
+
 }
