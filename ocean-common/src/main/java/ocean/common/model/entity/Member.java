@@ -61,7 +61,7 @@ public class Member {
 
 //	@Column(name = "status")
 //	EnumSet<MemberStatus> memberLevel = EnumSet.noneOf(MemberStatus.class);
-//
-//	@ManyToMany(targetEntity = Role.class, fetch = FetchType.LAZY)
-//	List<Role> roleList;
+
+	@ManyToMany(targetEntity = Role.class, fetch = FetchType.LAZY)
+	List<Role> roleList;
 }
