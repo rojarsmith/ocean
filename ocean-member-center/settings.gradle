@@ -1,0 +1,2 @@
+rootProject.name = 'ocean-member-center'
+includeFlat 'ocean-common'

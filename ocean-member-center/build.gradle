@@ -13,29 +13,19 @@ repositories {
 }
 
 ext {
-	set('springCloudVersion', "Hoxton.SR12")
+	set('springCloudVersion', "2020.0.3")
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure'
-	implementation 'org.postgresql:postgresql'
-	implementation 'com.sun.xml.bind:jaxb-impl:2.3.4'
-	implementation 'com.sun.xml.bind:jaxb-core:3.0.1'
+//    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation project(':ocean-common')
 
     compileOnly 'org.projectlombok:lombok'    
     annotationProcessor 'org.projectlombok:lombok'
 	
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	developmentOnly 'it.ozimov:embedded-redis:0.7.3'
 	
-	runtimeOnly 'com.h2database:h2'
-	
-	testImplementation 'it.ozimov:embedded-redis:0.7.3'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'com.h2database:h2'
 	
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
