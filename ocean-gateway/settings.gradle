@@ -1,0 +1,2 @@
+rootProject.name = 'ocean-gateway'
+includeFlat 'ocean-common'
