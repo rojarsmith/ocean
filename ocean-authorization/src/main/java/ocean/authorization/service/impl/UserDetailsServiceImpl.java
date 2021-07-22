@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import ocean.authorization.security.MemberDetails;
 import ocean.common.model.entity.Member;
+import ocean.common.model.entity.Role;
 import ocean.common.service.MemberService;
 
 /**
@@ -39,14 +40,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		}
 
 		Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-//		for (Role role : member.get().getRoleList()) {
+		for (Role role : member.get().getRoleList()) {
 //			SimpleGrantedAuthority sga = new SimpleGrantedAuthority(role.getCode());
 //			authorities.add(sga);
 //
 //			for (Permission r : role.getPermissionList()) {
 //				authorities.add(new SimpleGrantedAuthority(r.getId().toString()));
 //			}
-//		}
+		}
 
 		return new MemberDetails(
 				//

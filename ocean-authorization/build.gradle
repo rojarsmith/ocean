@@ -19,6 +19,7 @@ ext {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.retry:spring-retry'
     implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure'
 	implementation 'org.postgresql:postgresql'
 	implementation 'com.sun.xml.bind:jaxb-impl:2.3.4'

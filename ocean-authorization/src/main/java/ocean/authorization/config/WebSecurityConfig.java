@@ -17,7 +17,7 @@ import ocean.authorization.ServiceProperty;
 /**
  * @author Rojar Smith
  *
- * @date 2021-07-12
+ * @date 2021-07-22
  */
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -36,58 +36,38 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		if (serviceProperty.isTest()) {
-			http.csrf().disable()
-					//
-					.httpBasic().and()
-					//
-					.cors().and()
-					//
-					.headers().frameOptions().disable().and()
-					//
-					.formLogin().disable()
-					//
-					.authorizeRequests()
-					//
-					.antMatchers("/oauth/authorize**").permitAll()
-					//
-					.antMatchers("/oauth/token").permitAll()
-					//
-					.antMatchers("/oauth/token_key").permitAll()
-					//
-					.antMatchers("/oauth/check_token").permitAll()
-					//
-					.anyRequest().authenticated();
+			http.csrf().disable() //
+			        .httpBasic().and() //
+			        .cors().and() //
+			        .headers().frameOptions().disable().and() //
+			        .formLogin().disable() //
+			        .authorizeRequests() //
+			        .antMatchers("/oauth/authorize**").permitAll() //
+			        .antMatchers("/oauth/token").permitAll() //
+			        .antMatchers("/oauth/token_key").permitAll() //
+			        .antMatchers("/oauth/check_token").permitAll() //
+			        .anyRequest().authenticated();
 		} else {
-			http.csrf().disable()
-					//
-					.httpBasic().and()
-					//
-					.cors().and()
-					//
-					.headers().frameOptions().disable().and()
-					//
-					.formLogin().disable()
-					//
-					.authorizeRequests()
-					//
-					.antMatchers("/oauth/authorize**").permitAll()
-					//
-					.antMatchers("/oauth/token").permitAll()
-					//
-					.antMatchers("/oauth/token_key").permitAll()
-					//
-					.antMatchers("/oauth/check_token").permitAll()
-					//
-					.anyRequest().authenticated();
+			http.csrf().disable() //
+			        .httpBasic().and() //
+			        .cors().and() //
+			        .headers().frameOptions().disable().and() //
+			        .formLogin().disable() //
+			        .authorizeRequests() //
+			        .antMatchers("/oauth/authorize**").permitAll() //
+			        .antMatchers("/oauth/token").permitAll() //
+			        .antMatchers("/oauth/token_key").permitAll() //
+			        .antMatchers("/oauth/check_token").permitAll() //
+			        .anyRequest().authenticated();
 		}
 	}
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		if (serviceProperty.isTest()) {
-			web.ignoring()
-					//
-					.antMatchers("/h2-console/**");
+			web.ignoring() //
+			        .antMatchers("/h2-console/**") //
+			        .antMatchers("/rsa/pub");
 		}
 	}
 

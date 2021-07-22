@@ -63,23 +63,19 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
 		tokenEnhancerChain.setTokenEnhancers(Arrays.asList(infoTokenEnhancer, jwtAccessTokenConverter()));
 
-		endpoints.tokenStore(tokenStore())
-				//
-//				.tokenStore(jdbcTokenStore())
-				//
-				.tokenStore(redisTokenStore())
-				//
-				.tokenEnhancer(tokenEnhancerChain).authenticationManager(authenticationManager);
+		endpoints.tokenStore(tokenStore()) //
+//				.tokenStore(jdbcTokenStore()) //
+		        .tokenStore(redisTokenStore()) //
+		        .tokenEnhancer(tokenEnhancerChain).authenticationManager(authenticationManager);
 	}
 
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) {
-	    security
-	        .checkTokenAccess("isAuthenticated()")
-	        // Can access public key.
-	        .tokenKeyAccess("isAuthenticated()");
+		security.checkTokenAccess("isAuthenticated()")
+		        // Can access public key.
+		        .tokenKeyAccess("isAuthenticated()");
 	}
-	
+
 	@Bean
 	public ClientDetailsService clientDetails() {
 		return new JdbcClientDetailsService(dataSource);
@@ -103,19 +99,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		Resource key = null;
 		if (serviceProperty.isTest()) {
 			key = resourceLoader
-					.getResource("classpath:key/" + serviceProperty.getService().getOauth2().getKeyStore().getFile());
+			        .getResource("classpath:key/" + serviceProperty.getService().getOauth2().getKeyStore().getFile());
 		} else {
 			key = resourceLoader.getResource("file:" + serviceProperty.getSpring().getConfig().getAdditionalLocation()
-					+ serviceProperty.getService().getOauth2().getKeyStore().getFile());
+			        + serviceProperty.getService().getOauth2().getKeyStore().getFile());
 		}
-		KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(
-				//
-				key,
-				//
-				serviceProperty.getService().getOauth2().getKeyStore().getPassword().toCharArray());
-		converter.setKeyPair(keyStoreKeyFactory.getKeyPair(
-				//
-				serviceProperty.getService().getOauth2().getKeyStore().getPair()));
+		KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory( //
+		        key, //
+		        serviceProperty.getService().getOauth2().getKeyStore().getPassword().toCharArray());
+		converter.setKeyPair(keyStoreKeyFactory.getKeyPair( //
+		        serviceProperty.getService().getOauth2().getKeyStore().getPair()));
 		return converter;
 	}
 
