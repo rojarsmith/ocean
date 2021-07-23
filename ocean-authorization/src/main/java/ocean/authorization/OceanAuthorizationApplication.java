@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
@@ -26,9 +25,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @ComponentScan(basePackages = { "ocean.common", "ocean.authorization" })
 @EnableJpaRepositories(basePackages = { "ocean.common" })
 @EntityScan(basePackages = { "ocean.common" })
-@EnableAsync
 public class OceanAuthorizationApplication {
-	
+
 	@PostConstruct
 	void started() {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));

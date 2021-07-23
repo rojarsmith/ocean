@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ocean.authorization.ServiceProperty;
 import ocean.authorization.service.KeyService;
-import ocean.common.model.vo.ResultVO;
+import ocean.common.controller.BaseController;
 
 /**
  * For public RSA service
@@ -24,7 +24,7 @@ import ocean.common.model.vo.ResultVO;
  * @date 2021-07-21
  */
 @RestController
-public class KeyController {
+public class KeyController extends BaseController {
 
 	@Autowired
 	ServiceProperty serviceProperty;
@@ -42,8 +42,7 @@ public class KeyController {
 		Optional<String> jkey = jkeyCompletableFuture.get();
 		Map<String, Object> data = new HashMap<>();
 		data.put("pub", jkey.get());
-		return ResponseEntity.ok().body(new ResultVO<Object>("Success", data));
-
+		return success(data);
 	}
 
 }
