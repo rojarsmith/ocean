@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ocean.authorization.security.MemberDetails;
 import ocean.common.model.entity.Member;
 import ocean.common.model.entity.Role;
+import ocean.common.service.LocaleMessageSourceService;
 import ocean.common.service.MemberService;
 
 /**
@@ -28,6 +29,9 @@ import ocean.common.service.MemberService;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
+	LocaleMessageSourceService localeMessageSourceService;
+
+	@Autowired
 	MemberService memberService;
 
 	@Override
@@ -35,8 +39,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Optional<Member> member = memberService.findByUsername(username);
 		if (member.isEmpty()) {
-//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-//					localeMessageSourceService.getMessage("MEMBER_NOT_EXISTS"));
+			throw new UsernameNotFoundException(localeMessageSourceService.getMessage("MEMBER_IS_NOT_FOUND"));
 		}
 
 		Set<SimpleGrantedAuthority> authorities = new HashSet<>();

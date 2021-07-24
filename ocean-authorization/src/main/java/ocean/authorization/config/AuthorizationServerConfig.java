@@ -10,7 +10,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
@@ -29,6 +31,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ocean.authorization.ServiceProperty;
 import ocean.authorization.security.InfoTokenEnhancer;
+import ocean.authorization.security.RestOauthException;
 
 /**
  * @author Rojar Smith
@@ -62,18 +65,27 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 		TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
 		tokenEnhancerChain.setTokenEnhancers(Arrays.asList(infoTokenEnhancer, jwtAccessTokenConverter()));
-
 		endpoints.tokenStore(tokenStore()) //
 //				.tokenStore(jdbcTokenStore()) //
-		        .tokenStore(redisTokenStore()) //
-		        .tokenEnhancer(tokenEnhancerChain).authenticationManager(authenticationManager);
+				.tokenStore(redisTokenStore()) //
+				.tokenEnhancer(tokenEnhancerChain).authenticationManager(authenticationManager) //
+				.exceptionTranslator(exception -> {
+					if (exception instanceof OAuth2Exception) {
+						OAuth2Exception oAuth2Exception = (OAuth2Exception) exception;
+						return ResponseEntity.status(oAuth2Exception.getHttpErrorCode())
+								.body(new RestOauthException(oAuth2Exception.getMessage()));
+					} else {
+						throw exception;
+					}
+				});
+		;
 	}
 
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) {
 		security.checkTokenAccess("isAuthenticated()")
-		        // Can access public key.
-		        .tokenKeyAccess("isAuthenticated()");
+				// Can access public key.
+				.tokenKeyAccess("isAuthenticated()");
 	}
 
 	@Bean
@@ -99,16 +111,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		Resource key = null;
 		if (serviceProperty.isTest()) {
 			key = resourceLoader
-			        .getResource("classpath:key/" + serviceProperty.getService().getOauth2().getKeyStore().getFile());
+					.getResource("classpath:key/" + serviceProperty.getService().getOauth2().getKeyStore().getFile());
 		} else {
 			key = resourceLoader.getResource("file:" + serviceProperty.getSpring().getConfig().getAdditionalLocation()
-			        + serviceProperty.getService().getOauth2().getKeyStore().getFile());
+					+ serviceProperty.getService().getOauth2().getKeyStore().getFile());
 		}
 		KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory( //
-		        key, //
-		        serviceProperty.getService().getOauth2().getKeyStore().getPassword().toCharArray());
+				key, //
+				serviceProperty.getService().getOauth2().getKeyStore().getPassword().toCharArray());
 		converter.setKeyPair(keyStoreKeyFactory.getKeyPair( //
-		        serviceProperty.getService().getOauth2().getKeyStore().getPair()));
+				serviceProperty.getService().getOauth2().getKeyStore().getPair()));
 		return converter;
 	}
 
