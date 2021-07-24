@@ -15,6 +15,7 @@ public class JSON {
 	public static Optional<String> stringify(Object o) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
+			objectMapper.findAndRegisterModules();
 			String json = objectMapper.writeValueAsString(o);
 			return Optional.ofNullable(json);
 		} catch (JsonProcessingException e) {
@@ -26,6 +27,7 @@ public class JSON {
 	public static <T> Optional<T> parse(String json, Class<T> target) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
+			objectMapper.findAndRegisterModules();
 			T obj = objectMapper.readValue(json, target);
 			return Optional.ofNullable(obj);
 		} catch (JsonProcessingException e) {

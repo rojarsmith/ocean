@@ -55,7 +55,7 @@ public class Member {
 	String emailRescue;
 
 //	@CreationTimestamp
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
 	Instant registTime;
 
 //	@Column(name = "status")
