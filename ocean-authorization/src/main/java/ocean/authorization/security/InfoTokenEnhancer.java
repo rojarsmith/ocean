@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 /**
  * @author Rojar Smith
  *
- * @date 2021-07-15
+ * @date 2021-07-26
  */
 @Component
 public class InfoTokenEnhancer extends TokenEnhancerChain {
@@ -22,7 +22,7 @@ public class InfoTokenEnhancer extends TokenEnhancerChain {
 		// Create the customer information.
 		Map<String, Object> additionalInfo = new HashMap<>(1);
 		// The customer information.
-		additionalInfo.put("organization", authentication.getName());
+		additionalInfo.put("organization", "ocean");
 		// Inject the customer information.
 		((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
 

@@ -2,6 +2,7 @@ package ocean.authorization.init;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 import ocean.authorization.ServiceProperty;
+import ocean.common.enums.MemberStatus;
 import ocean.common.model.entity.Member;
 import ocean.common.service.MemberService;
 
@@ -62,14 +64,14 @@ public class DatabaseInit implements ApplicationRunner {
 			String utcTimeOwner = "2021-12-21T12:26:11Z";
 			Instant instantOwner = Instant.parse(utcTimeOwner);
 
-//			Member memberOwner = new Member();
-//			memberOwner.setUsername(serviceProperty.getOwnerUsername());
-//			memberOwner.setPassword(passwordEncoder.encode(serviceProperty.getOwnerPassword()));
-//			memberOwner.setEmail(serviceProperty.getOwnerEmail());
-//			memberOwner.setRegistTime(instantOwner);
-//			memberOwner.setMemberLevel(EnumSet.of(MemberStatus.REGISTERD, MemberStatus.VERIFIED_EMAIL));
+			Member memberOwner = new Member();
+			memberOwner.setUsername(serviceProperty.getService().getOwner().getUsername());
+			memberOwner.setPassword(passwordEncoder.encode(serviceProperty.getService().getOwner().getPassword()));
+			memberOwner.setEmail(serviceProperty.getService().getOwner().getEmail());
+			memberOwner.setRegistTime(instantOwner);
+			memberOwner.setMemberStatus(EnumSet.of(MemberStatus.REGISTERD, MemberStatus.VERIFIED_EMAIL));
 //			memberOwner.setRoleList(Arrays.asList(roleAdmin));
-//			members.add(memberOwner);
+			members.add(memberOwner);
 
 			Member member = new Member();
 			member.setUsername("aaa");
