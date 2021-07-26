@@ -1,6 +1,7 @@
 package ocean.common.model.entity;
 
 import java.time.Instant;
+import java.util.EnumSet;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -18,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
+import ocean.common.enums.MemberStatus;
 
 /**
  * @author Rojar Smith
@@ -58,8 +60,8 @@ public class Member {
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
 	Instant registTime;
 
-//	@Column(name = "status")
-//	EnumSet<MemberStatus> memberLevel = EnumSet.noneOf(MemberStatus.class);
+	@Column(name = "status")
+	EnumSet<MemberStatus> memberStatus = EnumSet.noneOf(MemberStatus.class);
 
 	@ManyToMany(targetEntity = Role.class, fetch = FetchType.LAZY)
 	List<Role> roleList;
