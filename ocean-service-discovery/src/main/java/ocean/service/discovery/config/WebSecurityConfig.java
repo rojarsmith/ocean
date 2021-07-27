@@ -15,7 +15,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// Eureka not support CSRF.
-		http.csrf().disable();
+		http.csrf().disable() //
+				.authorizeRequests().anyRequest().authenticated().and() //
+				.formLogin().and() //
+				.httpBasic();
 	}
 
 }

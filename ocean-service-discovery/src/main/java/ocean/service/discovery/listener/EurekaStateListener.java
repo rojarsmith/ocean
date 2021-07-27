@@ -25,6 +25,7 @@ import com.netflix.appinfo.InstanceInfo;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import ocean.service.discovery.ServiceProperty;
 
 @Component
 public class EurekaStateListener {
@@ -40,6 +41,9 @@ public class EurekaStateListener {
 	private String admins;
 
 	@Autowired
+	ServiceProperty serviceProperty;
+
+	@Autowired
 	private JavaMailSender javaMailSender;
 
 	// replication
@@ -52,9 +56,11 @@ public class EurekaStateListener {
 		String msg = "Your service " + event.getAppName() + "\n" + event.getServerId() + " has been shutdown.";
 		logger.info(msg);
 
-		String[] adminList = admins.split(",");
-		for (int i = 0; i < adminList.length; i++) {
-			sendEmailMsg(adminList[i], msg, "[Service]Shutdown Notice");
+		if (!serviceProperty.getService().getAlarm().getEmail().isSuppress()) {
+			String[] adminList = admins.split(",");
+			for (int i = 0; i < adminList.length; i++) {
+				sendEmailMsg(adminList[i], msg, "[Service]Shutdown Notice");
+			}
 		}
 	}
 
@@ -62,12 +68,14 @@ public class EurekaStateListener {
 	public void listen(EurekaInstanceRegisteredEvent event) {
 		InstanceInfo instanceInfo = event.getInstanceInfo();
 		String msg = "Service " + instanceInfo.getAppName() + "\n" + instanceInfo.getHostName() + ":"
-		        + instanceInfo.getPort() + " \nip: " + instanceInfo.getIPAddr() + " registered";
+				+ instanceInfo.getPort() + " \nip: " + instanceInfo.getIPAddr() + " registered";
 		logger.info(msg);
 
-		String[] adminList = admins.split(",");
-		for (int i = 0; i < adminList.length; i++) {
-			sendEmailMsg(adminList[i], msg, "[Service]Service online notice");
+		if (!serviceProperty.getService().getAlarm().getEmail().isSuppress()) {
+			String[] adminList = admins.split(",");
+			for (int i = 0; i < adminList.length; i++) {
+				sendEmailMsg(adminList[i], msg, "[Service]Service online notice");
+			}
 		}
 	}
 
