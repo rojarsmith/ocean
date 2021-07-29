@@ -37,37 +37,40 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		if (serviceProperty.isTest()) {
 			http.csrf().disable() //
-			        .httpBasic().and() //
-			        .cors().and() //
-			        .headers().frameOptions().disable().and() //
-			        .formLogin().disable() //
-			        .authorizeRequests() //
-			        .antMatchers("/oauth/authorize**").permitAll() //
-			        .antMatchers("/oauth/token").permitAll() //
-			        .antMatchers("/oauth/token_key").permitAll() //
-			        .antMatchers("/oauth/check_token").permitAll() //
-			        .anyRequest().authenticated();
+					.httpBasic().and() //
+					.cors().and() //
+					.headers().frameOptions().disable().and() //
+					.formLogin().disable() //
+					.authorizeRequests() //
+					.antMatchers("/oauth/authorize**").permitAll() //
+					.antMatchers("/oauth/token").permitAll() //
+					.antMatchers("/oauth/token_key").permitAll() //
+					.antMatchers("/oauth/check_token").permitAll() //
+					.anyRequest().authenticated();
 		} else {
 			http.csrf().disable() //
-			        .httpBasic().and() //
-			        .cors().and() //
-			        .headers().frameOptions().disable().and() //
-			        .formLogin().disable() //
-			        .authorizeRequests() //
-			        .antMatchers("/oauth/authorize**").permitAll() //
-			        .antMatchers("/oauth/token").permitAll() //
-			        .antMatchers("/oauth/token_key").permitAll() //
-			        .antMatchers("/oauth/check_token").permitAll() //
-			        .anyRequest().authenticated();
+					.httpBasic().and() //
+					.cors().and() //
+					.headers().frameOptions().disable().and() //
+					.formLogin().disable() //
+					.authorizeRequests() //
+					.antMatchers("/oauth/authorize**").permitAll() //
+					.antMatchers("/oauth/token").permitAll() //
+					.antMatchers("/oauth/token_key").permitAll() //
+					.antMatchers("/oauth/check_token").permitAll() //
+					.anyRequest().authenticated();
 		}
 	}
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		if (serviceProperty.isTest()) {
+		if (serviceProperty.isDevOrTest()) {
 			web.ignoring() //
-			        .antMatchers("/h2-console/**") //
-			        .antMatchers("/rsa/pub");
+					.antMatchers("/h2-console/**") //
+					.antMatchers("/rsa/pub");
+		} else {
+			web.ignoring() //
+					.antMatchers("/rsa/pub");
 		}
 	}
 

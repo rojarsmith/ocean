@@ -10,6 +10,7 @@ Program arguments:
 
 ```bash
 # For windows
+# Put oauth2-dev.jks to additional-location
 --spring.config.additional-location="C:\\my\\build\\service\\ocean\\config\\common\\" --spring.profiles.active=dev
 ```
 
